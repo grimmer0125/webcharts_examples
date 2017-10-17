@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>简单线图</title>
+    <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
+    <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+    <script src="https://a.alipayobjects.com/g/datavis/g2/2.3.12/g2.js"></script>
+    <script src="https://unpkg.com/g2-react@1.2.0/dist/index.js"></script>
+    <script src="https://cdn.bootcss.com/babel-core/5.8.38/browser.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <div id="c1"></div>
+    <script type="text/babel">
+    const Chart = createG2(chart => {
+      // chart.col('month', {
+      //   alias: '月份',
+      //   range: [0, 1]
+      // });
+      // chart.col('temperature', {
+      //   alias: '平均温度(°C)'
+      // });
+      chart.line().position('x*y').size(2);
+      chart.render();
+    });
+    const MyComponent = React.createClass({
+      getInitialState() {
+
+        var data = [];
+        for (let i = 0; i < 10000; i++) {
+          data.push({x:i, y:i})
+           // recharts
+           // this.x = this.x.concat({ x, y: x });
+          //  this.x = this.x.concat([`x${x}`, x]);
+        }
+
+        return {
+          data,
+          forceFit: true,
+          width: 500,
+          height: 450
+        };
+      },
+      render() {
+        return (
+          <div>
+            <Chart
+              data={this.state.data}
+              width={this.state.width}
+              height={this.state.height}
+              forceFit={this.state.forceFit} />
+      </div>
+        );
+      },
+    });
+    ReactDOM.render(<MyComponent />, document.getElementById('c1'));
+    </script>
+  </body>
+</html>
