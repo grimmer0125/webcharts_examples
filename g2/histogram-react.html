@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>柱状图（鼠标框选放大区域）</title>
+    <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
+    <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+    <script src="https://a.alipayobjects.com/g/datavis/g2/2.3.12/g2.js"></script>
+    <script src="https://unpkg.com/g2-react@1.2.0/dist/index.js"></script>
+    <script src="https://cdn.bootcss.com/babel-core/5.8.38/browser.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <div id="c1"></div>
+    <script type="text/babel">
+    const Chart = createG2(chart => {
+      const Stat = G2.Stat;
+      chart.setMode('select'); // 开启框选模式
+      chart.select('rangeX'); // 设置 X 轴范围的框选
+      chart.col('..count', {
+        alias: 'top2000 唱片总量'
+      });
+      chart.col('release', {
+        tickInterval: 5,
+        alias: '唱片发行年份'
+      });
+      chart.interval().position(Stat.summary.count('release')).color('#e50000');
+      chart.render();
+      // 监听双击事件，这里用于复原图表
+      chart.on('plotdblclick', function(ev) {
+        chart.get('options').filters = {}; // 清空 filters
+        chart.repaint();
+      });
+    });
+    const MyComponent = React.createClass({
+      getInitialState() {
+        return {
+          data: [],
+          forceFit: true,
+          width: 500,
+          height: 450,
+          plotCfg: {
+            margin: [20, 60, 80, 120]
+          },
+        };
+      },
+      componentDidMount: function() {
+        const self = this;
+        axios.get('top2001.json').then(function (response) {
+          const Frame = G2.Frame;
+          let frame = new Frame(response.data);
+          frame = Frame.sort(frame, 'release');
+          self.setState({
+            data: frame
+          });
+        }).catch(function (error) {
+          console.log(error);
+        });
+      },
+      render() {
+          return (
+            <div>
+              <Chart
+                data={this.state.data}
+                width={this.state.width}
+                height={this.state.height}
+                plotCfg={this.state.plotCfg}
+                forceFit={this.state.forceFit} />
+      </div>
+          );
+      },
+    });
+    ReactDOM.render(<MyComponent />, document.getElementById('c1'));
+    </script>
+  </body>
+</html>
