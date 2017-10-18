@@ -8,7 +8,9 @@
   </head>
   <body>
     <div id="c1"></div>
+    <script src="https://a.alipayobjects.com/g/datavis/g2-plugin-slider/1.2.1/slider.js"></script>
     <script>
+      $('<div id="slider"></div>').insertAfter('#c1');
       $.getJSON('top2001.json',function(data) {
         var Stat = G2.Stat;
         var chart = new G2.Chart({
@@ -22,8 +24,8 @@
         var Frame = G2.Frame;
         var frame = new Frame(data);
         frame = Frame.sort(frame, 'release');
-        chart.setMode('select'); // 开启框选模式
-        chart.select('rangeX'); // 设置 X 轴范围的框选
+        // chart.setMode('select'); // 开启框选模式
+        // chart.select('rangeX'); // 设置 X 轴范围的框选
         // chart.source(frame);
         chart.source(frame, {
           '..count': {
@@ -41,6 +43,15 @@
           chart.get('options').filters = {}; // 清空 filters
           chart.repaint();
         });
+
+        var slider = new G2.Plugin.slider({
+          domId: 'slider', //DOM id
+          height: 26,
+          xDim: 'release',
+          yDim: '...count',
+          charts: chart
+        });
+        slider.render();
       });
     </script>
   </body>
