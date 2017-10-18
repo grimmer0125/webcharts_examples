@@ -9,29 +9,18 @@
     <script src="https://unpkg.com/g2-react@1.2.0/dist/index.js"></script>
     <script src="https://cdn.bootcss.com/babel-core/5.8.38/browser.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://a.alipayobjects.com/jquery/jquery/1.11.1/jquery.js"></script>
   </head>
   <body>
     <div id="c1"></div>
+    <script src="https://a.alipayobjects.com/g/datavis/g2-plugin-slider/1.2.1/slider.js"></script>
+    <!-- <script> -->
+    <!-- </script> -->
+    <!-- <script src="https://a.alipayobjects.com/g/datavis/g2-plugin-slider/1.2.1/slider.js"></script> -->
     <script type="text/babel">
-    const Chart = createG2(chart => {
-      const Stat = G2.Stat;
-      chart.setMode('select'); // 开启框选模式
-      chart.select('rangeX'); // 设置 X 轴范围的框选
-      chart.col('..count', {
-        alias: 'top2000 唱片总量'
-      });
-      chart.col('release', {
-        tickInterval: 5,
-        alias: '唱片发行年份'
-      });
-      chart.interval().position(Stat.summary.count('release')).color('#e50000');
-      chart.render();
-      // 监听双击事件，这里用于复原图表
-      chart.on('plotdblclick', function(ev) {
-        chart.get('options').filters = {}; // 清空 filters
-        chart.repaint();
-      });
-    });
+    $('<div id="slider"></div>').insertAfter('#c1');
+
+
     const MyComponent = React.createClass({
       getInitialState() {
         return {
@@ -44,6 +33,11 @@
           },
         };
       },
+      // 原本以為會像這裡一樣要設定source才可以用到slider, https://github.com/antvis/g2-react/blob/master/examples/g2-plugin-slider.md,
+      // 但不是, 是某些沒設定好的關係, 現在已參考上面設定好,
+      // TODO 找出那一個
+      // ref2: https://antv.alipay.com/g2/demo/03-area/area.html
+      // ref3: https://antv.alipay.com/g2/doc/tutorial/start/g2-plugin-slider.html
       componentDidMount: function() {
         const self = this;
         axios.get('top2001.json').then(function (response) {
@@ -53,24 +47,78 @@
           self.setState({
             data: frame
           });
+
+          const Chart = createG2(chart => {
+            // chart.source(frame, {
+            //   '..count': {
+            //     alias: 'top2000 唱片总量'
+            //   },
+            //   release: {
+            //     tickInterval: 5,
+            //     alias: '唱片发行年份'
+            //   }
+            // });
+            const Stat = G2.Stat;
+            // chart.setMode('select'); // 开启框选模式
+            // chart.select('rangeX'); // 设置 X 轴范围的框选
+
+            // 跟 chart.source 一樣效果
+            // NOTE ref: https://antv.alipay.com/g2/demo/04-bar/bar.html
+            chart.col('..count', {
+              alias: 'top2000 唱片总量'
+            });
+            chart.col('release', {
+              tickInterval: 5,
+              //alias: 'xx'
+            });
+
+
+
+            chart.interval().position(Stat.summary.count('release')).color('#e50000');
+            chart.render();
+            // 监听双击事件，这里用于复原图表
+            chart.on('plotdblclick', function(ev) {
+              chart.get('options').filters = {}; // 清空 filters
+              chart.repaint();
+            });
+            var slider = new G2.Plugin.slider({
+              domId: 'slider', //DOM id
+              height: 26,
+              xDim: 'release',
+              yDim: '...count',
+              charts: chart
+            });
+            slider.render();
+          });
+
+          self.setState({Chart: Chart});
+
         }).catch(function (error) {
           console.log(error);
         });
+
+
       },
       render() {
+
+        if(this.state.Chart) {
           return (
-            <div>
-              <Chart
-                data={this.state.data}
-                width={this.state.width}
-                height={this.state.height}
-                plotCfg={this.state.plotCfg}
-                forceFit={this.state.forceFit} />
-      </div>
+            <this.state.Chart
+              data={this.state.data}
+              width={this.state.width}
+              height={this.state.height}
+              plotCfg={this.state.plotCfg}
+              forceFit={this.state.forceFit} />
           );
+        }
+        return (
+          <div>
+          </div>
+        );
       },
     });
     ReactDOM.render(<MyComponent />, document.getElementById('c1'));
     </script>
+
   </body>
 </html>
