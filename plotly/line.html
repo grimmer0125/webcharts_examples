@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Plotly.js -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+<body>
+
+  <p>
+    Here's a simple Plotly plot -
+    <a href="https://bit.ly/1Or9igj">plotly.js documentation</a>
+  </p>
+
+  <!-- Plots go in blank <div> elements.
+    You can size them in the plot layout,
+    or give the div a size as shown here.
+-->
+  <div id="tester1" style="width:90%;height:250px;"></div>
+  <p>
+    <div id="tester2" style="width:90%;height:250px;"></div>
+    <button onclick="myFunction()">Click me to test change 2nd chart's x,y range</button>
+
+    <script>
+      function myFunction() {
+        var update = {
+          title: 'some new title', // updates the title
+          'xaxis.range': [2, 4], // updates the xaxis range
+          'yaxis.range': [2, 4] // updates the end of the yaxis range
+        };
+        Plotly.relayout('tester2', update);
+        // document.getElementById("demo").innerHTML = "Hello World";
+        // Plotly.relayout('tester2',
+        //   'xaxis.range': [
+        //     2,
+        //     4
+        //   ],
+        //   'yaxis.range': [
+        //     2,
+        //     4
+        //   ]
+        // );
+      }
+    </script>
+
+    <script>
+      test1 = document.getElementById('tester1');
+
+      Plotly.plot(test1, [{
+        x: [1, 2, 3, 4, 5],
+        y: [1, 2, 4, 8, 16]
+      }], {
+        margin: {
+          t: 0
+        }
+      });
+
+
+      // var layout = {
+      //   title: "Reversed Axis with Min/Max",
+      //   xaxis: {
+      //     autorange: "reversed",
+      //     range: [0, 10]
+      //   }
+      // };
+      // Plotly.plot('myDiv', data, layout);
+
+      // https://codepen.io/etpinard/pen/xZPVzp
+      // layout.xaxis.range
+
+
+      test1.on('plotly_relayout',
+        function(eventdata) {
+          // alert('ZOOM!' + '\n\n' +
+          //   'Event data:' + '\n' +
+          //   JSON.stringify(eventdata) + '\n\n' +
+          //   'x-axis start:' + eventdata['xaxis.range[0]'] + '\n' +
+          //   'x-axis end:' + eventdata['xaxis.range[1]']);
+
+          if (eventdata['xaxis.range[0]'] && eventdata['xaxis.range[1]'] &&
+            eventdata['yaxis.range[0]'] && eventdata['yaxis.range[1]']) {
+            var update = {
+              'xaxis.range': [eventdata['xaxis.range[0]'], eventdata['xaxis.range[1]']], // updates the xaxis range
+              'yaxis.range': [eventdata['yaxis.range[0]'], eventdata['yaxis.range[1]']] // updates the end of the yaxis range
+            };
+            Plotly.relayout('tester2', update);
+          }
+
+
+
+        });
+
+      test2 = document.getElementById('tester2');
+
+      Plotly.plot(test2, [{
+        x: [1, 2, 3, 4, 5],
+        y: [1, 2, 4, 8, 16]
+      }], {
+        margin: {
+          t: 0
+        }
+      });
+
+      /* Current Plotly.js version */
+      console.log(Plotly.BUILD);
+    </script>
+</body>
+
+</html>
