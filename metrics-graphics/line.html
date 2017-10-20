@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta property='og:title' content='MetricsGraphics.js' />
+    <meta property='og:description' content='MetricsGraphics.js is a library optimized
+        for visualizing and laying out time-series data. It provides a simple way to produce
+        common types of graphics in a principled, consistent and responsive way.' />
+    <meta property='og:image' content='http://metricsgraphicsjs.org/images/og-logo.png' />
+    <meta property='og:type' content='website' />
+    <meta property='og:url' content='http://metricsgraphicsjs.org/' />
+    <meta property='og:site_name' content='MetricsGraphics.js' />
+
+    <!-- <link rel='icon' type='image/png' href='images/og-logo.png' /> -->
+    <title>MetricsGraphics.js - Examples</title>
+
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=PT+Serif:400,700,400italic' rel='stylesheet' type='text/css'>
+    <link href='https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css' rel='stylesheet' type='text/css'>
+    <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
+
+    <link href='./metricsgraphics.css' rel='stylesheet' type='text/css'>
+    <!-- <link href='css/metricsgraphics-demo.css' rel='stylesheet' type='text/css' id='light'> -->
+    <!-- <link href='' rel='stylesheet' type='text/css' id='dark'>
+    <link href='' rel='stylesheet' type='text/css' id='accessible'>
+    <link href='css/highlightjs-default.css' rel='stylesheet' type='text/css' id='light-code'>
+    <link href='' rel='stylesheet' type='text/css' id='dark-code'> -->
+
+    <!-- <script src='js/lib/highlight.pack.js'></script> -->
+    <!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script> -->
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+
+    <script src='./metricsgraphics.min.js'></script>
+    <!-- <script src='./utility.js'></script>
+    <script src='./bootstrap_tooltip_popover.js'></script> -->
+    <!-- <script src='./bootstrap_dropdown.js'></script> -->
+
+    <!-- dev start -->
+    <!-- <script src='../src/js/MG.js'></script>
+    <script src='../src/js/misc/utility.js'></script>
+    <script src='../src/js/common/data_graphic.js'></script>
+    <script src='../src/js/common/hooks.js'></script>
+    <script src='../src/js/common/register.js'></script>
+    <script src='../src/js/common/bootstrap_tooltip_popover.js'></script>
+    <script src='../src/js/common/scales.js'></script>
+    <script src='../src/js/common/chart_title.js'></script>
+    <script src='../src/js/common/y_axis.js'></script>
+    <script src='../src/js/common/x_axis.js'></script>
+    <script src='../src/js/common/scales.js'></script>
+    <script src='../src/js/common/init.js'></script>
+    <script src='../src/js/common/markers.js'></script>
+    <script src='../src/js/common/rollover.js'></script>
+    <script src='../src/js/common/window_listeners.js'></script>
+    <script src='../src/js/layout/bootstrap_dropdown.js'></script>
+    <script src='../src/js/layout/button.js'></script>
+    <script src='../src/js/charts/line.js'></script>
+    <script src='../src/js/charts/histogram.js'></script>
+    <script src='../src/js/charts/point.js'></script>
+    <script src='../src/js/charts/bar.js'></script>
+    <script src='../src/js/charts/table.js'></script>
+    <script src='../src/js/charts/missing.js'></script>
+    <script src='../src/js/misc/process.js'></script>
+    <script src='../src/js/misc/smoothers.js'></script>
+    <script src='../src/js/misc/formatters.js'></script>
+    <script src='../src/js/misc/transitions.js'></script>
+    <script src='../src/js/misc/error.js'></script> -->
+    <!-- dev end -->
+
+    <!-- <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-51487512-1', 'metricsgraphicsjs.org');
+    ga('send', 'pageview');
+    </script> -->
+</head>
+
+<body>
+    <div class='container'>
+        <div class='head'>
+            <!-- <ul>
+                <li><a href='http://metricsgraphicsjs.org/'>Home</a></li>
+                <li><a href='https://github.com/mozilla/metrics-graphics/releases'>Download</a></li>
+                <li><a href='interactive-demo.htm'>Interactive</a></li>
+                <li><a href='https://github.com/mozilla/metrics-graphics'>Code</a></li>
+                <li><a href='https://github.com/mozilla/metrics-graphics/issues'>Issues</a></li>
+                <li class='divider'>|</li>
+                <li><a href='#' id='light-css' class='pill active'>Light style</a></li>
+                <li><a href='#' id='dark-css' class='pill'>Dark style</a></li>
+                <li><a href='#' id='accessible-css' class='pill'>Accessible style</a></li>
+            </ul> -->
+
+            <!-- <img src='images/logo.svg' id='logo' class='svg' /> -->
+        </div>
+
+        <!-- <ul class='examples text-center'>
+            <li><a href='#' id='goto-lines' class='pill'>Lines</a></li>
+            <li><a href='#' id='goto-multilines' class='pill'>Multiple Lines</a></li>
+            <li><a href='#' id='goto-data' class='pill'>Data</a></li>
+            <li><a href='#' id='goto-axes' class='pill'>Axes</a></li>
+            <li><a href='#' id='goto-rollovers' class='pill'>Rollovers</a></li>
+            <li><a href='#' id='goto-auto-time-formatting' class='pill'>Automatic time formatting</a></li>
+            <li><a href='#' id='goto-annotations' class='pill'>Annotations</a></li>
+            <li><a href='#' id='goto-updating' class='pill'>Updating</a></li>
+            <li><a href='#' id='goto-other' class='pill'>Other</a></li>
+            <li><a href='#' id='goto-experimental' class='pill'>Experimental</a></li>
+            <li><a href='#' id='goto-addons' class='pill'>Addons</a></li>
+        </ul> -->
+
+        <!-- <div id='trunk'></div> -->
+        <div class='row trunk-section'>
+            <div class='col-lg-7 text-center' id='fake_users1'></div>
+            <div class='col-lg-5'>
+                <div class='data-column'><a href='https://raw.githubusercontent.com/mozilla/metrics-graphics/master/examples/data/fake_users1.json'>data</a></div>
+
+                <pre><code class='javascript'>d3.json('data/fake_users1.json', function(data) {
+            data = MG.convert.date(data, 'date');
+            MG.data_graphic({
+                title: "Line Chart",
+                description: "This is a simple line chart. You can remove the area portion by adding <i>area: false</i> to the arguments list.",
+                data: data,
+                width: 600,
+                height: 200,
+                right: 40,
+                target: document.getElementById('fake_users1'),
+                x_accessor: 'date',
+                y_accessor: 'value'
+            });
+        });</code></pre>
+
+            </div>
+        </div>
+
+        <!-- <div class='footer'>
+            <a href='http://metricsgraphicsjs.org'>MetricsGraphics.js 2.10</a>
+            <br />Created by <a href='https://twitter.com/alialmossawi'>Ali Almossawi</a> and
+            <a href='https://github.com/hamilton'>Hamilton Ulmer</a>
+            <br />2014-2016 &middot; Shared under a <a href='http://www.mozilla.org/MPL/2.0/'>
+            Mozilla Public License</a>
+            <br /><a href='https://github.com/mozilla/metrics-graphics'>
+                <i class='fa fa-github fa-3x' style='line-height:42px'></i>
+            </a>
+        </div> -->
+    </div> <!-- end container -->
+
+    <script>
+        // d3.json('data/fake_users1.json', function(data) {
+        //     data = MG.convert.date(data, 'date');
+        //     MG.data_graphic({
+        //         title: "Changing Single Line Color",
+        //         description: "For single line charts, there are two simple ways to change a line color. The first is to change the css (described on the wiki). The other is to specify a color value using color: <em>string</em> or colors: <em>string</em>.",
+        //         data: data,
+        //         width: 600,
+        //         height: 200,
+        //         right: 40,
+        //         color: '#8C001A',
+        //         target: 'div#custom-color',
+        //         x_accessor: 'date',
+        //         y_accessor: 'value'
+        //     });
+        // });
+
+        MG._hooks = {};
+        // d3.json('data/fake_users1.json', function(data) {
+        //     console.log("data1:", data);
+            // var data = MG.convert.date(data, 'date');
+            // console.log("data2:", data);
+
+            const data3 = [];
+            for (let i = 0; i < 1000; i++) {
+                data3.push({
+                    x: i,
+                    y: i
+                });
+            }
+
+
+            MG.data_graphic({
+                title: "Line Chart",
+                // description: "This is a simple line chart. You can remove the area portion by adding <i>area: false</i> to the arguments list.",
+                data: data3,
+                width: 600,
+                height: 200,
+                right: 40,
+                target: document.getElementById('fake_users1'),
+                x_accessor: 'x',
+                y_accessor: 'y'
+            });
+        // });
+
+        // d3.json('data/confidence_band.json', function(data) {
+        //     data = MG.convert.date(data, 'date');
+        //     MG.data_graphic({
+        //         title: "Confidence Band",
+        //         description: "This is an example of a graphic with a confidence band and extended x-axis ticks enabled.",
+        //         data: data,
+        //         format: 'percentage',
+        //         width: 600,
+        //         height: 200,
+        //         right: 40,
+        //         area: false,
+        //         target: '#confidence_band',
+        //         show_secondary_x_label: false,
+        //         show_confidence_band: ['l', 'u'],
+        //         x_extended_ticks: true
+        //     });
+        // });
+
+        // d3.json('data/small-range.json', function(data) {
+        //     data = MG.convert.date(data, 'date');
+        //     MG.data_graphic({
+        //         title: "Small Range of Integers",
+        //         description: "When we have a data object of integers and a small range of values, the auto-generated set of y-axis ticks are filtered so that we don't include fractional values.",
+        //         data: data,
+        //         interpolate: d3.curveLinear,
+        //         width: 600,
+        //         height: 200,
+        //         right: 40,
+        //         target: '#small-range'
+        //     });
+        // });
+
+        // d3.json('data/brief-1.json', function(data) {
+        //     data = MG.convert.date(data, 'date');
+        //     MG.data_graphic({
+        //         title: "Linked Graphic",
+        //         description: "The two graphics in this section are linked together. A rollover in one causes a rollover in the other.",
+        //         data: data,
+        //         linked: true,
+        //         width: 600,
+        //         height: 200,
+        //         right: 40,
+        //         xax_count: 4,
+        //         target: '#briefing-1'
+        //     });
+        // });
+
+        // d3.json('data/brief-2.json', function(data) {
+        //     data = MG.convert.date(data, 'date');
+        //     MG.data_graphic({
+        //         title: "Other Linked Graphic",
+        //         description: "Roll over and watch as the graphic to the left triggers.",
+        //         data: data,
+        //         area: false,
+        //         linked: true,
+        //         width: 600,
+        //         height: 200,
+        //         right: 40,
+        //         xax_count: 4,
+        //         target: '#briefing-2'
+        //     });
+        // });
+
+        // MG.data_graphic({
+        //     title: "Singleton",
+        //     description: "Handling a solitary data point.",
+        //     data: [{'date': new Date('2015-03-05T21:00:00Z'), 'value': 12000}],
+        //     width: 600,
+        //     height: 200,
+        //     right: 40,
+        //     target: '#singleton'
+        // });
+    </script>
+    <!-- <script src='js/main.js'></script> -->
+</body>
+</html>
