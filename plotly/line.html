@@ -78,17 +78,41 @@
           //   'x-axis start:' + eventdata['xaxis.range[0]'] + '\n' +
           //   'x-axis end:' + eventdata['xaxis.range[1]']);
 
-          if (eventdata['xaxis.range[0]'] && eventdata['xaxis.range[1]'] &&
-            eventdata['yaxis.range[0]'] && eventdata['yaxis.range[1]']) {
-            var update = {
-              'xaxis.range': [eventdata['xaxis.range[0]'], eventdata['xaxis.range[1]']], // updates the xaxis range
-              'yaxis.range': [eventdata['yaxis.range[0]'], eventdata['yaxis.range[1]']] // updates the end of the yaxis range
-            };
-            Plotly.relayout('tester2', update);
+          // reset:
+          // Event data:
+          // {"xaxis.autorange":true,"yaxis.autorange":true}
+
+
+          console.log('ZOOM!' + '\n\n' +
+            'Event data:' + '\n' +
+            JSON.stringify(eventdata) + '\n\n' +
+            'x-axis start:' + eventdata['xaxis.range[0]'] + '\n' +
+            'x-axis end:' + eventdata['xaxis.range[1]']);
+
+          var update = {};
+
+          if (eventdata['xaxis.autorange'] && eventdata['yaxis.autorange']) {
+            console.log("try to reset to initial zoom");
+            // update['xaxis.range'] = [0, 5];
+            // update['yaxis.range'] = [1, 16];
+            update['xaxis.autorange'] =  true;
+            update['yaxis.autorange'] = true;
+            // update['yaxis.range'] = [eventdata['yaxis.range[0]'], eventdata['yaxis.range[1]']]; // updates the xaxis range
           }
 
 
-
+          // console.log("key len:"+ Object.keys(update).length);
+          if (eventdata['xaxis.range[0]']) {
+            update['xaxis.range'] = [eventdata['xaxis.range[0]'], eventdata['xaxis.range[1]']]; // updates the xaxis range
+          }
+          //
+          if (eventdata['yaxis.range[0]']) {
+            update['yaxis.range'] = [eventdata['yaxis.range[0]'], eventdata['yaxis.range[1]']]; // updates the xaxis range
+          }
+          //
+          if (Object.keys(update).length > 0) {
+            Plotly.relayout('tester2', update);
+          }
         });
 
       test2 = document.getElementById('tester2');
