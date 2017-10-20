@@ -69,6 +69,17 @@
       // https://codepen.io/etpinard/pen/xZPVzp
       // layout.xaxis.range
 
+      // https://plot.ly/javascript/plotlyjs-events/#hover-event
+      // https://plot.ly/javascript/hover-events/#triggering-hover-events
+      test1.on('plotly_hover', function(data){
+        console.log("hover event:", data);
+        // data.points, data.points[0].x data.points[0].y
+
+        Plotly.Fx.hover('tester2',[
+            {curveNumber:data.points[0].curveNumber, pointNumber:data.points[0].pointNumber}//,
+            // {curveNumber:curve2, pointNumber:point2}
+        ]);
+      });
 
       test1.on('plotly_relayout',
         function(eventdata) {
