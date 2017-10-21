@@ -33,6 +33,25 @@ anychart.onDocumentReady(function() {
 
   // create line chart
   chart = anychart.line();
+  chart.xScroller(true);
+  // add a listener
+  chart.xScroller().listen("scrollerchangefinish", function(e){
+    console.log("scrollerchangefinish:", e)
+      var startRatio = e.startRatio;
+      var endRatio = e.endRatio;
+      // change the chart title
+      chart.title("The chart shows the part from " + startRatio + " and ends " + endRatio);
+      chart2.xZoom().setTo(e.startRatio, e.endRatio)
+  });
+
+  // add a listener
+  chart.xScroller().listen("scrollerchange", function(e){
+    console.log("scrollchange:", e)
+      // var startRatio = e.startRatio;
+      // var endRatio = e.endRatio;
+      // change the chart title
+      // chart.title("The chart shows the part from " + startRatio + " and ends " + endRatio);
+  });
 
   // turn on chart animation
   // chart.animation(true);
@@ -88,6 +107,7 @@ anychart.onDocumentReady(function() {
     'value': 1
   });
   chart2 = anychart.line();
+  chart2.xScroller(true);
   var series_2 = chart2.line(seriesData_2);
   chart2.container('tester2');
   chart2.draw();
