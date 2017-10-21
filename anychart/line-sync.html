@@ -33,6 +33,19 @@ anychart.onDocumentReady(function() {
 
   // create line chart
   chart = anychart.line();
+  // or pointsSelect
+  // https://docs.anychart.com/Common_Settings/Event_Listeners
+  chart.listen("pointsHover", function(e){
+    console.log("hover:", e); // event.point.getSeries();
+    series_2.hover(e.point.getIndex());
+
+    //https://docs.anychart.com/Common_Settings/Interactivity
+    //e.point
+    //var index = point.getIndex();
+
+    // console.log("series:", e.point.getSeries());
+  });
+
   chart.xScroller(true);
   // add a listener
   chart.xScroller().listen("scrollerchangefinish", function(e){
@@ -108,7 +121,7 @@ anychart.onDocumentReady(function() {
   });
   chart2 = anychart.line();
   chart2.xScroller(true);
-  var series_2 = chart2.line(seriesData_2);
+  series_2 = chart2.line(seriesData_2);
   chart2.container('tester2');
   chart2.draw();
 });
@@ -118,7 +131,7 @@ function getData() {
   var n = 10;
   var data = [];
   for (var i = 0; i < n; i++) {
-    data.push([i, i]);
+    data.push([i, 5*i]);
   }
 
   return data;
