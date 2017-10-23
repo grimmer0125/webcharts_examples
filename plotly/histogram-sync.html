@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Plotly.js -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+<body>
+
+  <p>
+    Here's a simple Plotly plot -
+    <a href="https://bit.ly/1Or9igj">plotly.js documentation</a>
+  </p>
+
+  <!-- Plots go in blank <div> elements.
+    You can size them in the plot layout,
+    or give the div a size as shown here.
+-->
+  <div id="tester1" style="width:90%;height:250px;"></div>
+  <p>
+    <div id="tester2" style="width:90%;height:250px;"></div>
+    <button onclick="myFunction()">Click me to test change 2nd chart's x,y range</button>
+
+    <script>
+      function myFunction() {
+        var update = {
+          title: 'some new title', // updates the title
+          'xaxis.range': [2, 4], // updates the xaxis range
+          'yaxis.range': [2, 4] // updates the end of the yaxis range
+        };
+        Plotly.relayout('tester2', update);
+        // document.getElementById("demo").innerHTML = "Hello World";
+        // Plotly.relayout('tester2',
+        //   'xaxis.range': [
+        //     2,
+        //     4
+        //   ],
+        //   'yaxis.range': [
+        //     2,
+        //     4
+        //   ]
+        // );
+      }
+    </script>
+
+    <script>
+      test1 = document.getElementById('tester1');
+
+      var x = [];
+      for (var i = 0; i < 500; i ++) {
+          x[i] = Math.random();
+      }
+
+      var trace = {
+          x: x,
+          type: 'histogram',
+        };
+      var data = [trace];
+      Plotly.plot('tester1', data);
+
+
+      // var layout = {
+      //   title: "Reversed Axis with Min/Max",
+      //   xaxis: {
+      //     autorange: "reversed",
+      //     range: [0, 10]
+      //   }
+      // };
+      // Plotly.plot('myDiv', data, layout);
+
+      // https://codepen.io/etpinard/pen/xZPVzp
+      // layout.xaxis.range
+
+      // https://plot.ly/javascript/plotlyjs-events/#hover-event
+      // https://plot.ly/javascript/hover-events/#triggering-hover-events
+      test1.on('plotly_hover', function(data){
+        console.log("hover event:", data);
+        // data.points, data.points[0].x data.points[0].y
+
+        Plotly.Fx.hover('tester2',[
+            {curveNumber:data.points[0].curveNumber, pointNumber:data.points[0].pointNumber}//,
+            // {curveNumber:curve2, pointNumber:point2}
+        ]);
+      });
+
+      test1.on('plotly_relayout',
+        function(eventdata) {
+          // alert('ZOOM!' + '\n\n' +
+          //   'Event data:' + '\n' +
+          //   JSON.stringify(eventdata) + '\n\n' +
+          //   'x-axis start:' + eventdata['xaxis.range[0]'] + '\n' +
+          //   'x-axis end:' + eventdata['xaxis.range[1]']);
+
+          // reset:
+          // Event data:
+          // {"xaxis.autorange":true,"yaxis.autorange":true}
+
+
+          console.log('ZOOM!' + '\n\n' +
+            'Event data:' + '\n' +
+            JSON.stringify(eventdata) + '\n\n' +
+            'x-axis start:' + eventdata['xaxis.range[0]'] + '\n' +
+            'x-axis end:' + eventdata['xaxis.range[1]']);
+
+          var update = {};
+
+          if (eventdata['xaxis.autorange'] && eventdata['yaxis.autorange']) {
+            console.log("try to reset to initial zoom");
+            // update['xaxis.range'] = [0, 5];
+            // update['yaxis.range'] = [1, 16];
+            update['xaxis.autorange'] =  true;
+            update['yaxis.autorange'] = true;
+            // update['yaxis.range'] = [eventdata['yaxis.range[0]'], eventdata['yaxis.range[1]']]; // updates the xaxis range
+          }
+
+
+          // console.log("key len:"+ Object.keys(update).length);
+          if (eventdata['xaxis.range[0]']) {
+            update['xaxis.range'] = [eventdata['xaxis.range[0]'], eventdata['xaxis.range[1]']]; // updates the xaxis range
+          }
+          //
+          if (eventdata['yaxis.range[0]']) {
+            update['yaxis.range'] = [eventdata['yaxis.range[0]'], eventdata['yaxis.range[1]']]; // updates the xaxis range
+          }
+          //
+          if (Object.keys(update).length > 0) {
+            Plotly.relayout('tester2', update);
+          }
+        });
+
+      test2 = document.getElementById('tester2');
+
+
+      var x2 = [];
+      for (var i = 0; i < 500; i ++) {
+          x2[i] = Math.random();
+      }
+      var trace2 = {
+          x: x2,
+          type: 'histogram',
+        };
+      var data2 = [trace2];
+      Plotly.plot('tester2', data2);
+      // Plotly.plot(test2, [{
+      //   x: [1, 2, 3, 4, 5],
+      //   y: [1, 2, 4, 8, 16]
+      // }], {
+      //   margin: {
+      //     t: 0
+      //   }
+      // });
+
+      /* Current Plotly.js version */
+      console.log(Plotly.BUILD);
+    </script>
+</body>
+
+</html>
